@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+ <head>
+   <meta charset="utf-8">
+   <title>Pagina 3</title>
+   <style>
+       canvas{
+           border: 1px solid #ae827a;
+           background-color: rgb(252, 231, 226);
+       }
+   </style>
+   <script>
+       window.onload = function() {
+           var x = Math.random() * 500 + 100;
+           var y = Math.random() * 300 + 150;
+           var dx = 3;
+           var pixel = 16; // Pixeles un poco más grandes y sencillos
+
+           // Matriz más simple para el sol
+           // 1: Rayos y borde, 2: Centro amarillo
+           var matrizSol = [
+               [1,0,1,0,1],
+               [0,2,2,2,0],
+               [1,2,2,2,1],
+               [0,2,2,2,0],
+               [1,0,1,0,1]
+           ];
+
+           function animate(){
+               requestAnimationFrame(animate);
+               var canvas = document.getElementById("micanvas");
+               var context = canvas.getContext("2d");
+               context.clearRect(0, 0, canvas.width, canvas.height);
+
+               // Texto "WIIIII"
+               context.font = 'bold 28pt Calibri';
+               context.fillStyle = '#ff8c00';
+               context.fillText('wiiiiii', x - 10, y - 25);
+
+               // Dibujar el sol
+               for (var fila = 0; fila < matrizSol.length; fila++) {
+                   for (var columna = 0; columna < matrizSol[fila].length; columna++) {
+                       var tipo = matrizSol[fila][columna];
+                       
+                       if (tipo !== 0) {
+                           var posX = x + (columna * pixel);
+                           var posY = y + (fila * pixel);
+
+                           if (tipo === 1) {
+                               context.fillStyle = "#ff8c00"; // Naranja
+                           } else if (tipo === 2) {
+                               context.fillStyle = "#ffd700"; // Amarillo
+                           }
+
+                           context.fillRect(posX, posY, pixel, pixel);
+                           context.strokeStyle = "#ffa500";
+                           context.lineWidth = 1;
+                           context.strokeRect(posX, posY, pixel, pixel);
+                       }
+                   }
+               }
+
+               // Rebote
+               if (x > 650 || x < 20){
+                   dx = -dx;
+               }
+               x += dx;
+           }
+           animate();
+       }
+   </script>
+   </head>
+ <body>
+    <canvas id="micanvas" width="800" height="600"></canvas>
+ </body>
+</html>

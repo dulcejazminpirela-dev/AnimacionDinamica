@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Pagina 3 - Flor Pixel Art</title>
+  <style>
+      canvas{
+          border: 3px solid brown;
+          background-color: white;
+      }
+  </style>
+  <script>
+      window.onload = function() {
+          var canvas = document.getElementById("micanvas");
+          var context = canvas.getContext("2d");
+          var pixel = 25; // Tamaño de cada bloque de pixel art
+
+          // Matriz de la flor: 1 = Pétalos, 2 = Centro, 3 = Tallo/Hojas
+          var matrizFlor = [
+              [0,0,0,1,1,1,1,1,0,0,0],
+              [0,0,1,1,1,1,1,1,1,0,0],
+              [0,1,1,1,2,2,2,1,1,1,0],
+              [1,1,1,2,2,2,2,2,1,1,1],
+              [1,1,1,2,2,2,2,2,1,1,1],
+              [0,1,1,1,2,2,2,1,1,1,0],
+              [0,0,1,1,1,3,1,1,1,0,0],
+              [0,0,0,0,3,3,3,0,0,0,0],
+              [0,0,0,0,3,3,3,0,0,0,0],
+              [0,0,0,0,3,3,3,0,0,0,0],
+              [0,0,0,3,3,3,3,3,0,0,0]
+          ];
+
+          var inicioX = 250;
+          var inicioY = 150;
+
+          for (var fila = 0; fila < matrizFlor.length; fila++) {
+              for (var columna = 0; columna < matrizFlor[fila].length; columna++) {
+                  var tipo = matrizFlor[fila][columna];
+                  
+                  if (tipo !== 0) {
+                      var x = inicioX + (columna * pixel);
+                      var y = inicioY + (fila * pixel);
+
+                      // Asignar color según el número de la matriz
+                      if (tipo === 1) {
+                          context.fillStyle = "#ff69b4"; // Rosa para los pétalos
+                      } else if (tipo === 2) {
+                          context.fillStyle = "#ffd700"; // Amarillo para el centro
+                      } else if (tipo === 3) {
+                          context.fillStyle = "#228b22"; // Verde para el tallo
+                      }
+
+                      context.fillRect(x, y, pixel, pixel);
+                      context.strokeStyle = "#dcdcdc"; // Borde sutil entre pixeles
+                      context.lineWidth = 1;
+                      context.strokeRect(x, y, pixel, pixel);
+                  }
+              }
+          }
+      }
+  </script>
+</head>
+<body>
+   <canvas id="micanvas" width="800" height="600"></canvas>
+</body>
+</html>
