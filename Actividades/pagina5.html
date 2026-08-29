@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+ <head>
+   <meta charset="utf-8">
+   <title>Pagina imagen animada</title>
+   <style>
+    body{
+        text-align: center;
+        color: #e1c3c3;
+    }
+    canvas{
+        border: 2px solid #ffc1c1;
+        background-color: #fee9e9;
+    }
+    ol {
+        margin: 0px auto;
+        text-align: center;
+        font-family: verdana;
+        font-size: 20px;
+        color: #c69b96;
+    }
+    </style>
+    <script>
+        // Posición inicial aleatoria
+        var x=Math.random() * 650;
+        var y = Math.random() * 450;
+        
+        var ancho = 150;
+        var alto = 220;
+
+        // Velocidad
+        var dx=2;
+        var dy = 2;
+        var imagen= new Image();
+        imagen.src = "mi monito 2.png"; 
+
+        function animate(){    
+            requestAnimationFrame(animate);
+            var canvas = document.getElementById("micanvas");
+            var context = canvas.getContext("2d");
+            
+            context.clearRect(0, 0, innerWidth, innerHeight);
+
+            // Textos
+            context.font = "30px Verdana";
+            context.fillStyle = "black";
+            context.textAlign = "center";
+            // context.fillText("music", x, y - 20);
+            context.fillText("YOP", x + 75, y + 190);
+
+            // Imagen
+            context.drawImage(imagen, x, y, 150, 150); 
+
+            // Rebote en los bordes izquierdo y derecho
+            if (x + ancho >= canvas.width || x <= 0){
+                dx = -dx;
+            }
+
+            // Rebote en los bordes superior e inferior
+            if (y + alto >= canvas.height || y <= 0){
+                dy = -dy;
+            }
+
+            // Mover imagen
+            x += dx;
+            y += dy;
+        }
+        animate();
+    </script>
+</head>
+<body>
+    <canvas id="micanvas" width="800" height="600"></canvas>
+
+    <ol>
+        <a href="../index.html">Regresar al menú</a>
+    </ol>
+</body>
+</html>
