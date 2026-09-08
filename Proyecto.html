@@ -1,107 +1,40 @@
 <!doctype html>
-<html lang="es">
-<head>
+<html>
     <meta charset="utf-8">
     <title>KeyCodes</title>
-    <!-- Fuentes de Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Knewave&display=swap" rel="stylesheet">
-    
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Knewave&display=swap" rel="stylesheet">
+  <head>
     <style>
       body { 
-        background-color: rgb(27, 166, 212);
+        background-color:rgb(27, 166, 212);
         text-align: center;
-        font-family: "Knewave", system-ui;
-        font-weight: 400;
-        font-style: normal;
       }
       canvas {
-        background-color: rgb(224, 244, 251);
+        background-color:rgb(224, 244, 251);
       }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <canvas id="canvas" width="1000" height="800"></canvas>
     <aside>Press A to E</aside>
 
+<style>
+  body {
+  font-family: "Knewave", system-ui;
+  font-weight: 400;
+  font-style: normal;
+
+}
+
+</style>
+    
     <script src="keycode.js"></script>
     <script>
     window.onload = function () {
       var canvas = document.getElementById("canvas");
       var context = canvas.getContext("2d");
-      var x = 200;
-      var y = 200;
-      
-      context.font = '40pt Calibri';
-      context.fillStyle = 'black';
-      context.fillText('TATTO', x + 230, y - 50);
-
-      // Carga de imágenes
-      var imagen = new Image();
-      imagen.src = "IMG1.jpg";
-      
-      var imagen2 = new Image();
-      imagen2.src = "IMG2.jpg";
-      
-      var imagen3 = new Image();
-      imagen3.src = "IMG3.jpg";
-      
-      var imagen4 = new Image();
-      imagen4.src = "IMG4.jpg";
-      
-      var imagen5 = new Image();
-      imagen5.src = "IMG5.jpg";
-      
-      var imagen6 = new Image();
-      imagen6.src = "IMG5.jpg"; // <-- Asigna aquí la ruta correcta para la imagen 6
-
-      imagen.onload = function() {
-        context.drawImage(imagen, x + 50, y + 5, 500, 500);
-      };
-
-      function onKeyboardEvent(event) {
-        switch (event.keyCode) {
-          case keycode.A:
-            console.log("Letra A!");
-            context.clearRect(0, 0, innerWidth, innerHeight);
-            context.fillText('TATTO', x + 230, y - 50);
-            context.drawImage(imagen2, x + 50, y + 5, 500, 500);
-            break;
-          case keycode.B:
-            console.log("Letra B!");
-            context.clearRect(0, 0, innerWidth, innerHeight);
-            context.fillText('CTATTO', x + 130, y - 50);
-            context.drawImage(imagen3, x + 50, y + 5, 500, 500);
-            break;
-          case keycode.C:
-            console.log("Letra C!");
-            context.clearRect(0, 0, innerWidth, innerHeight);
-            context.fillText('TATTO', x + 250, y - 50);
-            context.drawImage(imagen4, x + 50, y + 5, 500, 500);
-            break;
-          case keycode.D:
-            console.log("Letra D!");
-            context.clearRect(0, 0, innerWidth, innerHeight);
-            context.fillText('TATTO', x + 110, y - 50);
-            context.drawImage(imagen5, x + 50, y + 5, 500, 500);
-            break;
-          case keycode.E:
-            console.log("Letra E!");
-            context.clearRect(0, 0, innerWidth, innerHeight);
-            context.fillText('TATTO', x + 290, y - 50);
-            context.drawImage(imagen6, x + 50, y + 5, 500, 500);
-            break;
-          default:
-            console.log(event.keyCode);
-        }
-      }
-
-      window.addEventListener('keydown', onKeyboardEvent, false);
-    };
-    </script>
-</body>
-</html>      var context = canvas.getContext("2d");
       var x = 200;
       var y = 200;
       context.font = '40pt Calibri';
