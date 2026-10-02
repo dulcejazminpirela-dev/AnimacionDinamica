@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Script para dibujar figuras</title>
+    <style>
+      body {
+        background: #f5dfd0;
+      }
+      canvas {
+        display: block;
+        margin: auto;
+        background: #ffffff;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas" width="1200" height="675"></canvas>
+    <script>
+      window.onload = function () {
+        var canvas = document.getElementById('canvas'),
+            context = canvas.getContext('2d');
+
+        // casa: cuerpo
+        context.save();
+        context.lineWidth = 2.5;
+        context.strokeStyle = '#A37355';
+        context.fillStyle = '#BA835F';
+        context.fillRect(750, 420, 150, 90);
+        context.strokeRect(750, 420, 150, 90);
+
+        // casa: techo
+        context.strokeStyle = '#3D2314';
+        context.fillStyle = '#54311B';
+        context.beginPath();
+        context.moveTo(825, 360);
+        context.lineTo(730, 420);
+        context.lineTo(920, 420);
+        context.closePath();
+        context.fill();
+        context.stroke();
+        context.restore();
+
+        // estrella
+        context.save();
+        context.lineWidth = 2.5;
+        context.strokeStyle = '#FFDD12';
+        context.fillStyle = '#FFE442';
+        context.lineJoin = "round";
+        context.beginPath();
+        context.moveTo(400, 230);
+        context.lineTo(408, 250);
+        context.lineTo(430, 252);
+        context.lineTo(413, 266);
+        context.lineTo(418, 288);
+        context.lineTo(400, 276);
+        context.lineTo(382, 288);
+        context.lineTo(387, 266);
+        context.lineTo(370, 252);
+        context.lineTo(392, 250);
+        context.closePath();
+        context.fill();
+        context.stroke();
+        context.restore();
+
+        // luna
+        context.save();
+        context.beginPath();
+        context.arc(250, 200, 70, 0, Math.PI * 2, true);
+       var gradienteLuna = context.createRadialGradient(225, 175, 8, 250, 200, 75);
+gradienteLuna.addColorStop(0, '#FFFBEA');
+gradienteLuna.addColorStop(0.55, '#E6E2D6');
+gradienteLuna.addColorStop(1, '#A6A6A6');
+context.fillStyle = gradienteLuna;
+context.fill();
+context.restore();
+
+
+        // hongo: tallo
+        context.save();
+        context.lineWidth = 2.5;
+        context.strokeStyle = '#B8A88A';
+        context.fillStyle = '#EDE0C8';
+        context.fillRect(555, 460, 30, 50);
+        context.strokeRect(555, 460, 30, 50);
+
+        // hongo: sombrero (medio círculo)
+        context.strokeStyle = '#8B1A1A';
+        context.fillStyle = '#D62828';
+        context.beginPath();
+        context.arc(570, 460, 55, Math.PI, 0, false);
+        context.closePath();
+        context.fill();
+        context.stroke();
+
+      
+      };
+    </script>
+  </body>
+</html>

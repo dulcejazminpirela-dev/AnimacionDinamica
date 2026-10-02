@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Windows</title>
+    <style>
+  body { 
+    background-color:rgb(254, 254, 254);
+        text-align: center;
+
+  canvas {
+        background-color:rgb(0, 0, 0);
+    }
+
+  }
+    
+</style>
+  </head>  
+  <body>
+    <canvas id="canvas" width="1000" height="700">
+    </canvas>
+
+    
+    <script src="utils.js"></script>
+    <!-- <script src="./classes/pelota.js"></script> -->
+    <script>
+    window.onload = function () {
+      var canvas = document.getElementById('canvas'),
+          context = canvas.getContext('2d'),
+          //ball = new Pelota(),
+          pelota = new Image(),
+          angle = 300,
+          angle2 = 10,
+          centerScale = .25,
+          range = 0.1,
+          escalaX = 1,
+          escalaY = 1,
+          speed = 0.03,
+          speed2 = 0.03,
+          posicionX = 0,
+          posicionY = 0,
+          centerY = 0,
+          rangeY = 100,
+          rangeX = 100,
+          speedX = 2;
+          pelota.src = "microsoft-windows-logo.png";
+
+    //ball.x = canvas.width / 2;
+      //ball.y = canvas.height / 2;
+        
+      (function drawFrame () {
+        window.requestAnimationFrame(drawFrame, canvas);
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.save();
+        context.translate(0, 200);
+        escalaX = escalaY = centerScale + Math.sin(angle) * range;
+        posicionY = centerY / 2 + Math.sin(angle2) * rangeY;
+        angle += speed;
+        angle2 += speed2;
+        posicionX += speedX;
+        context.drawImage(pelota, posicionX, posicionY, pelota.width*escalaX, pelota.height*escalaY);
+        context.restore();
+      }());
+    };
+    </script>
+  </body>
+</html>
