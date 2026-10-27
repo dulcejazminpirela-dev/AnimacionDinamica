@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mini Paint</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #fce7f3, #e0f2fe);
+      color: #243047; display: flex; justify-content: center; align-items: center;
+      padding: 24px;
+    }
+    .app {
+      width: min(100%, 1000px); background: #fff; border-radius: 22px;
+      padding: 24px; box-shadow: 0 18px 45px #33415522;
+    }
+    header { text-align: center; margin-bottom: 20px; }
+    h1 { margin: 0 0 8px; font-size: clamp(1.8rem, 4vw, 2.5rem); }
+    header p { margin: 0; color: #64748b; }
+    .toolbar {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+      gap: 12px; padding: 16px; background: #f8fafc; border-radius: 16px;
+      margin-bottom: 16px;
+    }
+    .group { display: flex; align-items: center; flex-wrap: wrap; justify-content: center; gap: 8px; }
+    .group-label { font-size: .9rem; font-weight: bold; margin-right: 3px; }
+    .color {
+      width: 32px; height: 32px; border-radius: 50%; border: 3px solid white;
+      box-shadow: 0 0 0 1px #cbd5e1; cursor: pointer;
+    }
+    .color.active { box-shadow: 0 0 0 3px #334155; transform: scale(1.08); }
+    button {
+      border: 0; border-radius: 10px; padding: 10px 13px; cursor: pointer;
+      font-weight: 700; color: #334155; background: #e2e8f0;
+      transition: transform .12s, background .12s;
+    }
+    button:hover { transform: translateY(-1px); }
+    button.active { background: #c7d2fe; box-shadow: inset 0 0 0 2px #6366f1; }
+    .clear { background: #ef4444; color: white; }
+    .clear:hover { background: #dc2626; }
+    .canvas-wrap { border: 2px dashed #cbd5e1; border-radius: 14px; overflow: hidden; }
+    canvas {
+      display: block; width: 100%; height: 430px; background: white;
+      cursor: crosshair; touch-action: none;
+    }
+    .footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-top: 12px; color: #64748b; font-size: .88rem; }
+    @media (max-width: 600px) { .app { padding: 15px; } canvas { height: 360px; } .toolbar { padding: 12px 8px; } }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header>
+      <h1>🎨 Mini Paint</h1>
+      <p>¡Deja volar tu creatividad y dibuja lo que quieras!</p>
+    </header>
+
+    <section class="toolbar" aria-label="Herramientas de dibujo">
+      <div class="group">
+        <span class="group-label">Colores:</span>
+        <button class="color active" data-color="#222222" style="background:#222222" aria-label="Negro" title="Negro"></button>
+        <button class="color" data-color="#ef4444" style="background:#ef4444" aria-label="Rojo" title="Rojo"></button>
+        <button class="color" data-color="#f59e0b" style="background:#f59e0b" aria-label="Naranja" title="Naranja"></button>
+        <button class="color" data-color="#22c55e" style="background:#22c55e" aria-label="Verde" title="Verde"></button>
+        <button class="color" data-color="#3b82f6" style="background:#3b82f6" aria-label="Azul" title="Azul"></button>
+        <button class="color" data-color="#a855f7" style="background:#a855f7" aria-label="Morado" title="Morado"></button>
+        <button class="color" data-color="#ec4899" style="background:#ec4899" aria-label="Rosa" title="Rosa"></button>
+      </div>
+      <div class="group">
+        <span class="group-label">Grosor:</span>
+        <button class="size-btn" data-size="3">Delgado</button>
+        <button class="size-btn active" data-size="7">Mediano</button>
+        <button class="size-btn" data-size="14">Grueso</button>
+      </div>
+      <div class="group">
+        <button id="eraser">🧽 Borrador</button>
+        <button id="clear" class="clear">🗑️ Borrar todo</button>
+      </div>
+    </section>
+
+    <div class="canvas-wrap">
+      <canvas id="canvas" aria-label="Lienzo para dibujar"></canvas>
+    </div>
+    <div class="footer">
+      <span>Usa el mouse o tu dedo para dibujar.</span>
+      <span>Mini Paint · Tu pequeño estudio creativo</span>
+    </div>
+  </main>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const colorButtons = document.querySelectorAll('.color');
+    const sizeButtons = document.querySelectorAll('.size-btn');
+    const eraserButton = document.getElementById('eraser');
+    const clearButton = document.getElementById('clear');
+
+    let color = '#222222';
+    let brushSize = 7;
+    let drawing = false;
+    let erasing = false;
+
+    function resizeCanvas() {
+      const saved = document.createElement('canvas');
+      saved.width = canvas.width;
+      saved.height = canvas.height;
+      saved.getContext('2d').drawImage(canvas, 0, 0);
+      const rect = canvas.getBoundingClientRect();
+      const ratio = window.devicePixelRatio || 1;
+      canvas.width = Math.round(rect.width * ratio);
+      canvas.height = Math.round(rect.height * ratio);
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, rect.width, rect.height);
+      if (saved.width && saved.height) ctx.drawImage(saved, 0, 0, saved.width, saved.height, 0, 0, rect.width, rect.height);
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+    }
+
+    function position(event) {
+      const rect = canvas.getBoundingClientRect();
+      return { x: event.clientX - rect.left, y: event.clientY - rect.top };
+    }
+
+    canvas.addEventListener('pointerdown', event => {
+      drawing = true;
+      canvas.setPointerCapture(event.pointerId);
+      const p = position(event);
+      ctx.beginPath();
+      ctx.moveTo(p.x, p.y);
+      ctx.lineTo(p.x + 0.1, p.y + 0.1);
+      ctx.strokeStyle = erasing ? '#ffffff' : color;
+      ctx.lineWidth = erasing ? Math.max(18, brushSize * 2) : brushSize;
+      ctx.stroke();
+    });
+    canvas.addEventListener('pointermove', event => {
+      if (!drawing) return;
+      const p = position(event);
+      ctx.strokeStyle = erasing ? '#ffffff' : color;
+      ctx.lineWidth = erasing ? Math.max(18, brushSize * 2) : brushSize;
+      ctx.lineTo(p.x, p.y);
+      ctx.stroke();
+    });
+    function stopDrawing() { drawing = false; ctx.beginPath(); }
+    canvas.addEventListener('pointerup', stopDrawing);
+    canvas.addEventListener('pointercancel', stopDrawing);
+    canvas.addEventListener('pointerleave', event => { if (event.buttons === 0) stopDrawing(); });
+
+    colorButtons.forEach(button => button.addEventListener('click', () => {
+      color = button.dataset.color;
+      erasing = false;
+      colorButtons.forEach(b => b.classList.remove('active'));
+      button.classList.add('active');
+      eraserButton.classList.remove('active');
+    }));
+
+    sizeButtons.forEach(button => button.addEventListener('click', () => {
+      brushSize = Number(button.dataset.size);
+      sizeButtons.forEach(b => b.classList.remove('active'));
+      button.classList.add('active');
+    }));
+
+    eraserButton.addEventListener('click', () => {
+      erasing = !erasing;
+      eraserButton.classList.toggle('active', erasing);
+    });
+
+    clearButton.addEventListener('click', () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#ffffff';
+      const rect = canvas.getBoundingClientRect();
+      ctx.fillRect(0, 0, rect.width, rect.height);
+    });
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+  </script>
+</body>
+</html>
